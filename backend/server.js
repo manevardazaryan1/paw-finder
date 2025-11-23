@@ -1,9 +1,13 @@
 import express from 'express'
-import sequelize from './database/database.js'
 import cors from 'cors'
 import dotenv from 'dotenv'
 import path from 'path'
 import { fileURLToPath } from 'url'
+import sequelize from './database/database.js'
+import userRouter from './routes/user.js'
+import reportRouter from './routes/report.js'
+import { setupAssociations } from './database/associations.js'
+import { errorHandler } from './middlewares/errorHandler.js'
 
 dotenv.config()
 
@@ -26,14 +30,16 @@ app.use(cors(corsOptions))
 
 app.use('/static', express.static(path.join(__dirname, 'static')))
 
+app.use('/auth', userRouter)
+app.use('/reports', reportRouter)
+app.use(errorHandler)
+
+setupAssociations()
+
 sequelize
   .sync()
   .then(() => console.log('Database synced'))
   .catch((err) => console.error('Error syncing database:', err))
-
-app.get('/', (_, res) => {
-  res.send('Paw Finder api')
-})
 
 app.listen(PORT, () => {
   console.log(`\nAPI server running at http://localhost:${PORT}`)

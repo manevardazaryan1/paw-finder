@@ -1,7 +1,7 @@
 import { DataTypes } from 'sequelize'
-import sequelize from '../database/database'
+import sequelize from '../database/database.js'
 
-const Report = sequelize.define(
+export const Report = sequelize.define(
   'Report',
   {
     status: {
@@ -26,5 +26,3 @@ const Report = sequelize.define(
     timestamps: true
   }
 )
-
-export default Report
