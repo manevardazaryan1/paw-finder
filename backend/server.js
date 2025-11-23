@@ -1,5 +1,6 @@
 import express from 'express'
 import cors from 'cors'
+import http from 'http'
 import dotenv from 'dotenv'
 import path from 'path'
 import { fileURLToPath } from 'url'
@@ -8,15 +9,17 @@ import userRouter from './routes/user.js'
 import reportRouter from './routes/report.js'
 import { setupAssociations } from './database/associations.js'
 import { errorHandler } from './middlewares/errorHandler.js'
+import { socket } from './socket.js'
 
 dotenv.config()
 
+const app = express()
+
+const server = http.createServer(app)
 const PORT = process.env.PORT
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
-
-const app = express()
 
 const corsOptions = {
   origin: process.env.FRONTEND_URL,
@@ -24,23 +27,20 @@ const corsOptions = {
   allowedHeaders: ['Content-Type', 'Authorization']
 }
 
+socket(server)
+
 app.use(express.json())
 
 app.use(cors(corsOptions))
 
 app.use('/static', express.static(path.join(__dirname, 'static')))
 
-app.use('/auth', userRouter)
-app.use('/reports', reportRouter)
+app.use('/api/auth', userRouter)
+app.use('/api/reports', reportRouter)
 app.use(errorHandler)
 
 setupAssociations()
 
-sequelize
-  .sync()
-  .then(() => console.log('Database synced'))
-  .catch((err) => console.error('Error syncing database:', err))
+sequelize.sync()
 
-app.listen(PORT, () => {
-  console.log(`\nAPI server running at http://localhost:${PORT}`)
-})
+server.listen(PORT)

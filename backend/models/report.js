@@ -17,6 +17,10 @@ export const Report = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false
     },
+    description: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
     contact: {
       type: DataTypes.STRING,
       allowNull: false

@@ -2,7 +2,7 @@ import { body } from 'express-validator'
 import { User } from '../../models/user.js'
 import bcrypt from 'bcryptjs'
 
-export const signUpValidationHandler = [
+export const signUpValidation = [
   body('name').notEmpty().withMessage('Name is required'),
   body('email')
     .isEmail()
@@ -25,7 +25,7 @@ export const signUpValidationHandler = [
     })
 ]
 
-export const signInValidationHandler = [
+export const signInValidation = [
   body('email')
     .isEmail()
     .withMessage('Valid email is required')
