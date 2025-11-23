@@ -1,10 +1,31 @@
+import { Op } from 'sequelize'
 import { User } from '../models/user.js'
 import { Report } from '../models/report.js'
 import { getIO } from '../socket.js'
+import { REPORTS_PER_PAGE, SORT_REPORTS_BY, REPORTS_SORT_ORDER } from '../constants.js'
 
 export const getAll = async (req, res, next) => {
   try {
-    const reports = await Report.findAll({
+    const page = parseInt(req.query.page) || 1
+    const limit = parseInt(req.query.limit) || REPORTS_PER_PAGE
+    const offset = (page - 1) * limit
+    const { status, search, sortBy = SORT_REPORTS_BY, sortOrder = REPORTS_SORT_ORDER } = req.query
+
+    const where = {}
+    if (status) {
+      where.status = status
+    }
+
+    if (search) {
+      where[Op.or] = [
+        { type: { [Op.iLike]: `%${search}%` } },
+        { status: { [Op.iLike]: `%${search}%` } },
+        { description: { [Op.iLike]: `%${search}%` } }
+      ]
+    }
+
+    const { count, rows } = await Report.findAndCountAll({
+      where,
       include: [
         {
           model: User,
@@ -12,13 +33,22 @@ export const getAll = async (req, res, next) => {
           attributes: ['id', 'name', 'email']
         }
       ],
-      order: [['createdAt', 'DESC']]
+      limit,
+      offset,
+      order: [[sortBy, sortOrder]]
     })
+
+    const lastPage = Math.ceil(count / limit)
 
     res.status(200).json({
       success: true,
       message: 'Reports were fetched successfully',
-      reports
+      reports: rows,
+      page,
+      totalReports: count,
+      lastPage,
+      hasNextPage: page < lastPage,
+      hasPrevPage: page > 1
     })
   } catch (err) {
     next(err)
