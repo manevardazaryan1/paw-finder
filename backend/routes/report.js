@@ -20,6 +20,6 @@ router.put(
   validateRequestHandler,
   update
 )
-router.delete('/:id', auth, authorization, upload.single('image'), destroy)
+router.delete('/:id', auth, authorization, destroy)
 
 export default router

@@ -1,4 +1,6 @@
 import { Op } from 'sequelize'
+import fs from 'fs/promises'
+import path from 'path'
 import { User } from '../models/user.js'
 import { Report } from '../models/report.js'
 import { getIO } from '../socket.js'
@@ -45,7 +47,7 @@ export const getAll = async (req, res, next) => {
       message: 'Reports were fetched successfully',
       reports: rows,
       page,
-      totalReports: count,
+      total: count,
       lastPage,
       hasNextPage: page < lastPage,
       hasPrevPage: page > 1
@@ -140,11 +142,17 @@ export const destroy = async (req, res, next) => {
   try {
     const report = req.report
 
+    const imageName = report.image
+    const imagePath = path.join(process.cwd(), 'static', imageName)
+
     await report.destroy()
+
+    await fs.unlink(imagePath)
 
     res.status(200).json({
       success: true,
-      message: 'Report was deleted successfully'
+      message: 'Report was deleted successfully',
+      id: report.id
     })
   } catch (err) {
     next(err)
