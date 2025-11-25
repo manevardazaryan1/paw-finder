@@ -106,7 +106,9 @@ export const create = async (req, res, next) => {
       userId: req.user.id
     })
 
-    getIO.emit('report', report)
+    getIO().emit('report', report)
+
+    res.status(201).json({ message: 'Report created successfully' })
   } catch (err) {
     next(err)
   }

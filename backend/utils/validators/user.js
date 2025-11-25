@@ -41,7 +41,12 @@ export const signInValidation = [
     .notEmpty()
     .withMessage('Password is required')
     .custom(async (password, { req }) => {
-      const isMatch = await bcrypt.compare(password, req.user.password)
+      let isMatch = false
+
+      if (req.user) {
+        isMatch = await bcrypt.compare(password, req.user?.password)
+      }
+
       if (!isMatch) {
         const error = new Error('Invalid password')
         error.statusCode = 401

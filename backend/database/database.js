@@ -11,7 +11,10 @@ const __dirname = path.dirname(__filename)
 const sequelize = new Sequelize({
   dialect: 'sqlite',
   storage: path.join(__dirname, process.env.DB_PATH),
-  logging: false
+  logging: false,
+  dialectOptions: {
+    foreign_keys: true
+  }
 })
 
 export default sequelize

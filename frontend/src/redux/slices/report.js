@@ -1,5 +1,17 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { createSelector } from '@reduxjs/toolkit'
 import { getAll, getById, create, update, destroy } from '../../services/report'
+
+const reportsState = (state) => state.reports
+
+export const selectReports = createSelector([reportsState], (state) => state.reports)
+export const selectSelected = createSelector([reportsState], (state) => state.selected)
+export const selectPage = createSelector([reportsState], (state) => state.page)
+export const selectLastPage = createSelector([reportsState], (state) => state.lastPage)
+export const selectHasNextPage = createSelector([reportsState], (state) => state.hasNextPage)
+export const selectHasPrevPage = createSelector([reportsState], (state) => state.hasPrevPage)
+export const selectTotal = createSelector([reportsState], (state) => state.total)
+export const selectLoading = createSelector([reportsState], (state) => state.loading)
 
 const initialState = {
   reports: [],
@@ -9,9 +21,7 @@ const initialState = {
   hasNextPage: false,
   hasPrevPage: false,
   total: 0,
-  loading: false,
-  success: null,
-  error: null
+  loading: false
 }
 
 const reportSlice = createSlice({
@@ -23,97 +33,75 @@ const reportSlice = createSlice({
     },
     clear: (state) => {
       state.selected = null
+    },
+    addReport: (state, action) => {
+      state.reports = [action.payload, ...state.reports]
     }
   },
   extraReducers: (builder) => {
     builder
       .addCase(getAll.pending, (state) => {
         state.loading = true
-        state.success = null
-        state.error = null
       })
       .addCase(getAll.fulfilled, (state, action) => {
         state.loading = false
-        state.reports = action.payload
+        state.reports = action.payload.reports
         state.page = action.payload.page
         state.lastPage = action.payload.lastPage
         state.hasNextPage = action.payload.hasNextPage
         state.hasPrevPage = action.payload.hasPrevPage
         state.total = action.payload.total
-        state.success = action.payload.success
       })
-      .addCase(getAll.rejected, (state, action) => {
-        state.success = false
+      .addCase(getAll.rejected, (state) => {
         state.loading = false
-        state.error = action.payload?.message || 'Failed to fetch reports'
       })
 
       .addCase(getById.pending, (state) => {
         state.loading = true
-        state.success = null
-        state.error = null
       })
       .addCase(getById.fulfilled, (state, action) => {
         state.loading = false
         state.selectedReport = action.payload
-        state.success = action.payload.success
       })
-      .addCase(getById.rejected, (state, action) => {
-        state.success = false
+      .addCase(getById.rejected, (state) => {
         state.loading = false
-        state.error = action.payload?.message || 'Failed to fetch report'
       })
 
       .addCase(create.pending, (state) => {
         state.loading = true
-        state.success = null
-        state.error = null
       })
-      .addCase(create.fulfilled, (state, action) => {
+      .addCase(create.fulfilled, (state) => {
         state.loading = false
-        state.reports.push(action.payload)
-        state.success = action.payload.success
       })
-      .addCase(create.rejected, (state, action) => {
-        state.success = false
+      .addCase(create.rejected, (state) => {
         state.loading = false
-        state.error = action.payload?.message || 'Failed to create report'
       })
 
       .addCase(update.pending, (state) => {
         state.loading = true
-        state.success = null
-        state.error = null
       })
       .addCase(update.fulfilled, (state, action) => {
-        const { report, success } = action.payload
+        const { report } = action.payload
         state.loading = false
         const index = state.reports.findIndex(({ id }) => id === report.id)
         if (index !== -1) state.reports[index] = report
-        state.success = success
       })
-      .addCase(update.rejected, (state, action) => {
-        state.success = false
+      .addCase(update.rejected, (state) => {
         state.loading = false
-        state.error = action.payload?.message || 'Failed to update report'
       })
 
       .addCase(destroy.pending, (state) => {
         state.loading = true
-        state.success = null
-        state.error = null
       })
       .addCase(destroy.fulfilled, (state, action) => {
         state.loading = false
         state.reports = state.reports.filter(({ id }) => id !== action.payload.id)
-        state.success = action.payload.success
       })
-      .addCase(destroy.rejected, (state, action) => {
+      .addCase(destroy.rejected, (state) => {
         state.loading = false
-        state.error = action.payload?.message || 'Failed to delete report'
       })
   }
 })
 
-export const { select, clear } = reportSlice.actions
+export const { select, clear, addReport } = reportSlice.actions
 export default reportSlice.reducer

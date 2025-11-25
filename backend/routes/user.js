@@ -6,6 +6,6 @@ import { signUp, signIn } from '../controllers/user.js'
 const router = express.Router()
 
 router.post('/sign-up', signUpValidation, validateRequestHandler, signUp)
-router.post('sign-in', signInValidation, validateRequestHandler, signIn)
+router.post('/sign-in', signInValidation, validateRequestHandler, signIn)
 
 export default router

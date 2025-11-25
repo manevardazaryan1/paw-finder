@@ -1,5 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { signUp, signIn } from '../../services/auth'
+import { createSelector } from 'reselect'
+import { signIn } from '../../../services/auth'
+
+const auth = (state) => state.signIn
+
+export const selectUser = createSelector([auth], (auth) => auth.user)
+export const selectToken = createSelector([auth], (auth) => auth.token)
+export const selectLoading = createSelector([auth], (auth) => auth.loading)
+export const selectError = createSelector([auth], (auth) => auth.error)
 
 const token = localStorage.getItem('token')
 const user = localStorage.getItem('user')
@@ -7,19 +15,17 @@ const user = localStorage.getItem('user')
 const initialState = {
   user: user ? JSON.parse(user) : null,
   token: token || null,
-  success: null,
   loading: false,
   error: null
 }
 
-const authSlice = createSlice({
-  name: 'auth',
+const signInSlice = createSlice({
+  name: 'auth/signIn',
   initialState,
   reducers: {
-    logout: (state) => {
+    signOut: (state) => {
       state.user = null
       state.token = null
-      state.success = null
       state.error = null
       localStorage.removeItem('token')
       localStorage.removeItem('user')
@@ -27,42 +33,26 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(signUp.pending, (state) => {
-        state.loading = true
-        state.success = null
-        state.error = null
-      })
-      .addCase(signUp.fulfilled, (state, action) => {
-        state.loading = false
-        state.user = action.payload.user
-        state.success = action.payload.success
-      })
-      .addCase(signUp.rejected, (state, action) => {
-        state.success = false
-        state.loading = false
-        state.error = action.payload?.message || 'Sign up failed'
-      })
-
       .addCase(signIn.pending, (state) => {
         state.loading = true
-        state.success = null
         state.error = null
       })
       .addCase(signIn.fulfilled, (state, action) => {
         state.loading = false
         state.user = action.payload.user
         state.token = action.payload.token
-        state.success = action.payload.success
         localStorage.setItem('token', action.payload.token)
         localStorage.setItem('user', JSON.stringify(action.payload.user))
       })
       .addCase(signIn.rejected, (state, action) => {
-        state.success = false
         state.loading = false
-        state.error = action.payload?.message || 'Sign in failed'
+        state.error = [
+          action.payload?.message || 'Sign in failed',
+          ...action.payload.errors?.map((err) => err.msg)
+        ]
       })
   }
 })
 
-export const { logout } = authSlice.actions
-export default authSlice.reducer
+export const { signOut, getCurrentUser } = signInSlice.actions
+export default signInSlice.reducer
