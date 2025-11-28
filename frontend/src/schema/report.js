@@ -5,6 +5,7 @@ export const reportCreateSchema = Yup.object({
     .oneOf(['lost', 'found'], "Status must be either 'lost' or 'found'")
     .required('Status is required'),
   type: Yup.string().required('Pet type is required'),
+  location: Yup.string().required('Location is required'),
   description: Yup.string()
     .min(15, 'Description must be at least 15 characters long')
     .required('Description is required'),
@@ -23,6 +24,7 @@ export const reportUpdateSchema = Yup.object({
     .oneOf(['lost', 'found'], "Status must be either 'lost' or 'found'")
     .required('Status is required'),
   type: Yup.string().required('Pet type is required'),
+  location: Yup.string().required('Location is required'),
   description: Yup.string()
     .min(15, 'Description must be at least 15 characters long')
     .required('Description is required'),

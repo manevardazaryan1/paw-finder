@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { selectSelected } from '../redux/slices/report'
@@ -13,7 +13,7 @@ const useDetails = (onClose) => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
-  const isOwner = report?.user?.id === currentUser.id
+  const isOwner = report?.userId === currentUser.id
 
   const handleUpdate = () => {
     navigate('/update-report')

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useSearchParams } from 'react-router-dom'
 import { getAll } from '../services/report'
@@ -6,8 +6,9 @@ import { select, clear } from '../redux/slices/report'
 import useDebounce from './useDebounce'
 import { REPORTS_SORT_ORDER } from '../constants/app'
 import {
+  selectSelected,
+  selectTotal,
   selectReports,
-  selectLoading,
   selectLastPage,
   selectHasNextPage,
   selectHasPrevPage
@@ -17,17 +18,39 @@ const useReports = () => {
   const dispatch = useDispatch()
   const [searchParams] = useSearchParams()
   const [page, setPage] = useState(parseInt(searchParams.get('page')) || 1)
-  const [isOpen, setIsOpen] = useState(false)
+  const selected = useSelector(selectSelected)
+  const [isOpen, setIsOpen] = useState(!!selected)
   const [status, setStatus] = useState('')
   const [searchInput, setSearchInput] = useState('')
   const [sortOrder, setSortOrder] = useState(REPORTS_SORT_ORDER)
 
   const reports = useSelector(selectReports)
-  const loading = useSelector(selectLoading)
+  const total = useSelector(selectTotal)
   const lastPage = useSelector(selectLastPage)
   const hasNextPage = useSelector(selectHasNextPage)
   const hasPrevPage = useSelector(selectHasPrevPage)
   const search = useDebounce(searchInput, 500)
+  const prevTotal = useRef(total)
+
+  useEffect(() => {
+    dispatch(getAll({ page, status, search, sortOrder }))
+  }, [dispatch, page, status, search, sortOrder])
+
+  useEffect(() => {
+    if (total < prevTotal.current) {
+      prevTotal.current = total
+      dispatch(getAll({ page, status, search, sortOrder }))
+    }
+  }, [dispatch, total])
+
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflowY = 'hidden'
+    }
+    return () => {
+      document.body.style.overflowY = 'auto'
+    }
+  }, [isOpen])
 
   const handleSearchChange = (value) => {
     setSearchInput(value)
@@ -44,10 +67,6 @@ const useReports = () => {
     setPage(1)
   }
 
-  useEffect(() => {
-    dispatch(getAll({ page, status, search, sortOrder }))
-  }, [dispatch, page, status, search, sortOrder])
-
   const handleClose = () => {
     dispatch(clear())
     setIsOpen(false)
@@ -60,7 +79,6 @@ const useReports = () => {
 
   return {
     reports,
-    loading,
     page,
     lastPage,
     hasNextPage,

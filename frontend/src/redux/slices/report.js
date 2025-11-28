@@ -29,13 +29,19 @@ const reportSlice = createSlice({
   initialState,
   reducers: {
     select: (state, action) => {
-      state.selected = state.reports.find(({ id }) => id === action.payload.id) || null
+      return {
+        ...state,
+        selected: state.reports.find(({ id }) => id === action.payload.id) || null
+      }
     },
     clear: (state) => {
-      state.selected = null
+      return { ...state, selected: null }
     },
     addReport: (state, action) => {
-      state.reports = [action.payload, ...state.reports]
+      return { ...state, reports: [action.payload, ...state.reports] }
+    },
+    updateSelected: (state, action) => {
+      return { ...state, selected: action.payload.report }
     }
   },
   extraReducers: (builder) => {
@@ -72,6 +78,7 @@ const reportSlice = createSlice({
       })
       .addCase(create.fulfilled, (state) => {
         state.loading = false
+        state.total += 1
       })
       .addCase(create.rejected, (state) => {
         state.loading = false
@@ -96,6 +103,7 @@ const reportSlice = createSlice({
       .addCase(destroy.fulfilled, (state, action) => {
         state.loading = false
         state.reports = state.reports.filter(({ id }) => id !== action.payload.id)
+        state.total -= 1
       })
       .addCase(destroy.rejected, (state) => {
         state.loading = false
@@ -103,5 +111,5 @@ const reportSlice = createSlice({
   }
 })
 
-export const { select, clear, addReport } = reportSlice.actions
+export const { select, clear, addReport, updateSelected } = reportSlice.actions
 export default reportSlice.reducer

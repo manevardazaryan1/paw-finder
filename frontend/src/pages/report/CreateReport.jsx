@@ -1,7 +1,19 @@
-import ReportForm from '../../components/forms/Report'
+import ReportForm from '../../components/forms/report/Report'
+import useCreateReport from '../../hooks/useCreateReport'
 
 const CreateReport = () => {
-  return <ReportForm type="create" />
+  return (
+    <div
+      className="w-full min-h-[calc(100vh-80px)] py-6
+                bg-gradient-to-br 
+                from-[#000000] 
+                via-[#ff00ff] 
+                to-[#3b82f6]"
+    >
+      <h2 className="text-2xl font-semibold text-gray-800 text-center">Create Report</h2>
+      <ReportForm hook={useCreateReport} type="create" />
+    </div>
+  )
 }
 
 export default CreateReport

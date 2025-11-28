@@ -1,17 +1,29 @@
-import { useDispatch } from 'react-redux'
+import { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { useFormik } from 'formik'
 import { useNavigate } from 'react-router-dom'
 import { create } from '../services/report'
 import { reportCreateSchema } from '../schema/report'
+import { selectSelected } from '../redux/slices/report'
+import { clear } from '../redux/slices/report'
 
 const useCreateReport = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
+  const selected = useSelector(selectSelected)
+
+  useEffect(() => {
+    if (selected) {
+      dispatch(clear())
+    }
+  }, [])
+
   const formik = useFormik({
     initialValues: {
       status: 'lost',
       type: '',
+      location: '',
       description: '',
       contact: '',
       image: null
@@ -22,6 +34,7 @@ const useCreateReport = () => {
         const formData = new FormData()
         formData.append('status', values.status)
         formData.append('type', values.type)
+        formData.append('location', values.location)
         formData.append('description', values.description)
         formData.append('contact', values.contact)
         formData.append('image', values.image)
@@ -43,7 +56,7 @@ const useCreateReport = () => {
     }
   })
 
-  return formik
+  return { formik }
 }
 
 export default useCreateReport

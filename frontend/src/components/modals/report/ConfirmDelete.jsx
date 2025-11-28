@@ -3,44 +3,29 @@ const ConfirmDelete = ({ isOpen, onClose, onConfirm, message }) => {
 
   return (
     <div
-      style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '100%',
-        backgroundColor: 'rgba(0,0,0,0.5)',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        zIndex: 1000
-      }}
       onClick={onClose}
+      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
     >
       <div
-        style={{
-          backgroundColor: 'white',
-          padding: '20px',
-          borderRadius: '8px',
-          minWidth: '300px',
-          maxWidth: '500px',
-          position: 'relative'
-        }}
         onClick={(e) => e.stopPropagation()}
+        className="bg-white p-6 rounded-lg shadow-lg w-11/12 max-w-md relative break-words whitespace-normal"
       >
-        <h3>Confirm</h3>
-        <p>{message || 'Are you sure?'}</p>
+        <h3 className="text-lg font-semibold mb-2">Confirm</h3>
+        <p className="text-gray-700">{message || 'Are you sure?'}</p>
 
-        <div
-          style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', marginTop: '15px' }}
-        >
-          <button onClick={onClose}>Cancel</button>
+        <div className="flex justify-end gap-3 mt-4 flex-wrap">
+          <button
+            onClick={onClose}
+            className="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300 transition"
+          >
+            Cancel
+          </button>
           <button
             onClick={() => {
               onConfirm()
               onClose()
             }}
-            style={{ backgroundColor: 'red', color: 'white' }}
+            className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition"
           >
             Delete
           </button>

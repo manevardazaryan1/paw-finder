@@ -5,6 +5,8 @@ export const validation = [
 
   body('type').notEmpty().withMessage('Pet type is required'),
 
+  body('location').notEmpty().withMessage('Location is required'),
+
   body('description')
     .notEmpty()
     .withMessage('Description is required')

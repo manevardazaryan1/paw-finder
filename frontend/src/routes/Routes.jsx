@@ -8,6 +8,7 @@ import CreateReport from '../pages/report/createReport'
 import UpdateReport from '../pages/report/UpdateReport'
 import ProtectedRoute from './ProtectedRoute'
 import GuestRoute from './GuestRoute'
+import NotFound from '../pages/NotFound'
 
 const AppRoutes = () => {
   return (
@@ -25,6 +26,7 @@ const AppRoutes = () => {
             <Route path="update-report" element={<UpdateReport />} />
           </Route>
         </Route>
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>
   )

@@ -22,7 +22,8 @@ export const getAll = async (req, res, next) => {
       where[Op.or] = [
         { type: { [Op.like]: `%${search}%` } },
         { status: { [Op.like]: `%${search}%` } },
-        { description: { [Op.like]: `%${search}%` } }
+        { description: { [Op.like]: `%${search}%` } },
+        { location: { [Op.like]: `%${location}%` } }
       ]
     }
 
@@ -89,7 +90,7 @@ export const getById = (req, res, next) => {
 
 export const create = async (req, res, next) => {
   try {
-    const { status, type, description, contact } = req.body
+    const { status, type, location, description, contact } = req.body
 
     if (!req.file) {
       const error = new Error('Image file is required')
@@ -100,6 +101,7 @@ export const create = async (req, res, next) => {
     const report = await Report.create({
       status,
       type,
+      location,
       description,
       contact,
       image: req.file.filename,
@@ -116,11 +118,12 @@ export const create = async (req, res, next) => {
 
 export const update = async (req, res, next) => {
   try {
-    const { status, type, description, contact } = req.body
+    const { status, type, location, description, contact } = req.body
     const report = req.report
 
     report.status = status || report.status
     report.type = type || report.type
+    report.location = location || report.location
     report.description = description || report.description
     report.contact = contact || report.contact
 
@@ -129,6 +132,16 @@ export const update = async (req, res, next) => {
     }
 
     await report.save()
+
+    await report.reload({
+      include: [
+        {
+          model: User,
+          as: 'user',
+          attributes: ['id', 'name', 'email']
+        }
+      ]
+    })
 
     res.status(200).json({
       success: true,

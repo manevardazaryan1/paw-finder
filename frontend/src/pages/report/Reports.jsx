@@ -1,77 +1,82 @@
-// import { useDispatch } from 'react-redux'
 import useReports from '../../hooks/useReports'
 import { BACKEND_URL } from '../../constants/app'
+import List from '../../components/list/List'
+import ListItem from '../../components/list/ListItem'
 import Details from '../../components/modals/report/Details'
 import Pagination from '../../components/pagination/Pagination'
+import FilterPanel from '../../components/filter/report/FilterPanel'
 
 const Reports = () => {
   const {
     reports,
-    loading,
     page,
     hasNextPage,
     hasPrevPage,
     lastPage,
     isOpen,
-    status,
-    searchInput,
-    sortOrder,
-    handleSearchChange,
-    handleStatusChange,
-    handleSortOrderChange,
     handleClose,
     handleShowDetails,
     setPage
   } = useReports()
 
-  if (loading) return <div>Loading...</div>
-
   return (
-    <div>
-      <h1>All Reports</h1>
+    <div className="bg-black min-h-screen">
+      <div className="px-4 py-6">
+        <FilterPanel />
 
-      <input
-        type="text"
-        value={searchInput}
-        placeholder="Search..."
-        onChange={(e) => handleSearchChange(e.target.value)}
-      />
+        {reports.length === 0 && (
+          <p className="text-center text-gray-500 text-lg mt-6">No reports found</p>
+        )}
 
-      <select value={status} onChange={(e) => handleStatusChange(e.target.value)}>
-        <option value="">All</option>
-        <option value="lost">Lost</option>
-        <option value="found">Found</option>
-      </select>
+        <List>
+          {reports.map((datum) => {
+            return (
+              <ListItem key={datum.id}>
+                <div className="relative w-full h-48">
+                  <img
+                    src={`${BACKEND_URL}/static/${datum.image}`}
+                    alt={datum.type}
+                    className="w-full h-full object-cover object-[30%_45%] rounded-t-lg"
+                  />
+                  <span
+                    className={`absolute top-2 left-2 text-white px-3 py-1 rounded ${
+                      datum.status.toLowerCase() === 'lost'
+                        ? 'bg-red-800'
+                        : datum.status.toLowerCase() === 'found'
+                          ? 'bg-green-800'
+                          : 'bg-gray-400'
+                    } font-semibold`}
+                  >
+                    {datum.status}
+                  </span>
+                </div>
+                <div className="p-4 flex flex-col items-start w-full">
+                  <h2 className="font-semibold text-lg mb-1 w-full truncate">{datum.type}</h2>
+                  <p className="text-gray-500 text-sm mb-1 w-full truncate">
+                    Contact: {datum.contact}
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => handleShowDetails(datum)}
+                    className="text-gray-400 text-sm hover:text-gray-600 transition-colors ml-auto"
+                  >
+                    Details
+                  </button>
+                </div>
+              </ListItem>
+            )
+          })}
+        </List>
 
-      <select value={sortOrder} onChange={(e) => handleSortOrderChange(e.target.value)}>
-        <option value="DESC">Newest</option>
-        <option value="ASC">Oldest</option>
-      </select>
-
-      <ul>
-        {reports.map((report) => (
-          <li key={report.id}>
-            {report.type} - {report.status} - {report.contact}
-            <img
-              src={`${BACKEND_URL}/static/${report.image}`}
-              alt={report.type}
-              style={{ width: '100px', height: '100px', objectFit: 'cover' }}
-            />
-            <button type="button" onClick={() => handleShowDetails(report)}>
-              Details
-            </button>
-          </li>
-        ))}
-      </ul>
-
-      <Pagination
-        currentPage={page}
-        lastPage={lastPage}
-        onPageChange={setPage}
-        hasNextPage={hasNextPage}
-        hasPrevPage={hasPrevPage}
-      />
-      <Details isOpen={isOpen} onClose={handleClose} />
+        <Pagination
+          currentPage={page}
+          lastPage={lastPage}
+          onPageChange={setPage}
+          hasNextPage={hasNextPage}
+          hasPrevPage={hasPrevPage}
+        />
+        <Details isOpen={isOpen} onClose={handleClose} />
+      </div>
     </div>
   )
 }
