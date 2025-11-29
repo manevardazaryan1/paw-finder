@@ -1,7 +1,7 @@
-<h1><a id='top'>![Paw Finder logo](./src/assets/images/logo/logo.png) Paw-Finder: Lost and Found Pet Reporting Platform</a></h1>
+![Paw Finder logo](./frontend/src/assets/images/logo/logo.png)  <h1><a id='top'>Paw-Finder: Lost and Found Pet Reporting Platform</a></h1>
 
-![Paw Finder app](./src/assets/images/app/main.webp)
-![Paw Finder reports](./src/assets/images/app/app.webp)
+![Paw Finder app](./frontend/src/assets/images/app/main.webp)
+![Paw Finder reports](./frontend/src/assets/images/app/app.webp)
 
 A full-stack application designed to connect users who have lost a pet with those who have found one. Users can create, view, and manage reports.
 
