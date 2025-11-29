@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import usePagination from '../../hooks/usePagination'
 
 const Pagination = ({ currentPage, lastPage, hasPrevPage, hasNextPage, onPageChange }) => {
@@ -31,7 +32,6 @@ const Pagination = ({ currentPage, lastPage, hasPrevPage, hasNextPage, onPageCha
           >
             {currentPage}
           </button>
-
           <button
             disabled={!hasNextPage}
             onClick={() => handlePageChange(currentPage + 1)}
@@ -39,7 +39,6 @@ const Pagination = ({ currentPage, lastPage, hasPrevPage, hasNextPage, onPageCha
           >
             Next
           </button>
-
           {currentPage !== lastPage && (
             <button
               onClick={() => handlePageChange(lastPage)}
@@ -54,4 +53,4 @@ const Pagination = ({ currentPage, lastPage, hasPrevPage, hasNextPage, onPageCha
   )
 }
 
-export default Pagination
+export default memo(Pagination)

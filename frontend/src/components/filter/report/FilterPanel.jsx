@@ -19,7 +19,6 @@ const FilterPanel = () => {
         onChange={(e) => handleSearchChange(e.target.value)}
         className="w-full md:w-64 sm:w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition"
       />
-
       <select
         value={status}
         onChange={(e) => handleStatusChange(e.target.value)}
@@ -29,7 +28,6 @@ const FilterPanel = () => {
         <option value="lost">Lost</option>
         <option value="found">Found</option>
       </select>
-
       <select
         value={sortOrder}
         onChange={(e) => handleSortOrderChange(e.target.value)}

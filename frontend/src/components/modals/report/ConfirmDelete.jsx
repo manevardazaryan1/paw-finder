@@ -1,3 +1,5 @@
+import { memo } from 'react'
+
 const ConfirmDelete = ({ isOpen, onClose, onConfirm, message }) => {
   if (!isOpen) return null
 
@@ -35,4 +37,4 @@ const ConfirmDelete = ({ isOpen, onClose, onConfirm, message }) => {
   )
 }
 
-export default ConfirmDelete
+export default memo(ConfirmDelete)

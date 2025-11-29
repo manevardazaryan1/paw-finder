@@ -21,9 +21,9 @@ export const getAll = async (req, res, next) => {
     if (search) {
       where[Op.or] = [
         { type: { [Op.like]: `%${search}%` } },
+        { location: { [Op.like]: `%${search}%` } },
         { status: { [Op.like]: `%${search}%` } },
-        { description: { [Op.like]: `%${search}%` } },
-        { location: { [Op.like]: `%${location}%` } }
+        { description: { [Op.like]: `%${search}%` } }
       ]
     }
 

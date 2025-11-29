@@ -5,7 +5,7 @@ const NotFound = () => {
   useEffect(() => {
     document.title = '404 - Page Not Found'
     return () => {
-      document.title = 'Your App Name'
+      document.title = 'Paw Finder'
     }
   }, [])
 
@@ -18,12 +18,8 @@ const NotFound = () => {
       }}
     >
       <h1>404</h1>
-
       <h2>Page Not Found</h2>
-
       <p>Oops! The page you are looking for doesn't exist or has been moved.</p>
-
-      {/* Link the user back to a safe place (usually the homepage) */}
       <Link
         to="/"
         style={{

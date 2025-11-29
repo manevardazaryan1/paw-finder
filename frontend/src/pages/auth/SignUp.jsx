@@ -92,7 +92,6 @@ const SignUp = () => {
             Sign Up
           </button>
         </form>
-
         {error && (
           <div className="mt-4 bg-red-50 border border-red-300 text-red-600 text-sm rounded-md p-3">
             {error.map((line, idx) => (

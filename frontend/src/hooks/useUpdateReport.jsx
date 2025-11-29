@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useMemo, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useFormik } from 'formik'
 import { useNavigate } from 'react-router-dom'
@@ -17,15 +17,20 @@ const useUpdateReport = () => {
     }
   }, [])
 
-  const formik = useFormik({
-    initialValues: {
-      status: report?.status,
-      type: report?.type,
-      location: report?.location,
-      description: report?.description,
-      contact: report?.contact,
+  const initialValues = useMemo(
+    () => ({
+      status: report?.status || '',
+      type: report?.type || '',
+      location: report?.location || '',
+      description: report?.description || '',
+      contact: report?.contact || '',
       image: null
-    },
+    }),
+    [report]
+  )
+
+  const formik = useFormik({
+    initialValues: initialValues,
     validationSchema: reportUpdateSchema,
     onSubmit: async (values, { setSubmitting, setErrors }) => {
       try {
@@ -59,9 +64,7 @@ const useUpdateReport = () => {
     }
   })
 
-  return {
-    formik: report && formik
-  }
+  return { formik }
 }
 
 export default useUpdateReport

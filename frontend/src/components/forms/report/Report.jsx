@@ -1,8 +1,6 @@
-import useReportForm from '../../../hooks/useReportForm'
+import { memo } from 'react'
 
-const ReportForm = ({ type, hook }) => {
-  const { formik } = useReportForm({ hook })
-
+const ReportForm = ({ type, formik }) => {
   return (
     <>
       {
@@ -30,7 +28,6 @@ const ReportForm = ({ type, hook }) => {
               <p style={{ color: 'red' }}>{formik.errors?.status}</p>
             )}
           </div>
-
           <div className="flex flex-col">
             <label htmlFor="type" className="mb-1 font-medium text-gray-700">
               Pet Type
@@ -48,7 +45,6 @@ const ReportForm = ({ type, hook }) => {
               <p className="text-red-500 text-sm mt-1">{formik.errors?.type}</p>
             )}
           </div>
-
           <div className="flex flex-col">
             <label htmlFor="location" className="mb-1 font-medium text-gray-700">
               Location
@@ -67,7 +63,6 @@ const ReportForm = ({ type, hook }) => {
               <p className="text-red-500 text-sm mt-1">{formik.errors?.location}</p>
             )}
           </div>
-
           <div className="flex flex-col">
             <label htmlFor="description" className="mb-1 font-medium text-gray-700">
               Description
@@ -86,7 +81,6 @@ const ReportForm = ({ type, hook }) => {
               <p className="text-red-500 text-sm mt-1">{formik.errors?.description}</p>
             )}
           </div>
-
           <div className="flex flex-col">
             <label htmlFor="contact" className="mb-1 font-medium text-gray-700">
               Contact Info
@@ -105,7 +99,6 @@ const ReportForm = ({ type, hook }) => {
               <p className="text-red-500 text-sm mt-1">{formik.errors?.contact}</p>
             )}
           </div>
-
           <div className="flex flex-col">
             <label htmlFor="image" className="mb-1 font-medium text-gray-700">
               Image
@@ -123,7 +116,6 @@ const ReportForm = ({ type, hook }) => {
               <p className="text-red-500 text-sm mt-1">{formik.errors?.image}</p>
             )}
           </div>
-
           <button
             type="submit"
             disabled={formik.isSubmitting}
@@ -137,4 +129,4 @@ const ReportForm = ({ type, hook }) => {
   )
 }
 
-export default ReportForm
+export default memo(ReportForm)

@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef, useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useSearchParams } from 'react-router-dom'
 import { getAll } from '../services/report'
@@ -31,9 +31,14 @@ const useReports = () => {
   const hasPrevPage = useSelector(selectHasPrevPage)
   const search = useDebounce(searchInput, 500)
   const prevTotal = useRef(total)
+  let currentPage
 
   useEffect(() => {
-    dispatch(getAll({ page, status, search, sortOrder }))
+    currentPage = page
+    if (currentPage > lastPage) {
+      current = 1
+    }
+    dispatch(getAll({ page: currentPage, status, search, sortOrder }))
   }, [dispatch, page, status, search, sortOrder])
 
   useEffect(() => {
@@ -52,30 +57,30 @@ const useReports = () => {
     }
   }, [isOpen])
 
-  const handleSearchChange = (value) => {
+  const handleSearchChange = useCallback((value) => {
     setSearchInput(value)
     setPage(1)
-  }
+  }, [])
 
-  const handleStatusChange = (value) => {
+  const handleStatusChange = useCallback((value) => {
     setStatus(value)
     setPage(1)
-  }
+  }, [])
 
-  const handleSortOrderChange = (order) => {
+  const handleSortOrderChange = useCallback((order) => {
     setSortOrder(order)
     setPage(1)
-  }
+  }, [])
 
-  const handleClose = () => {
+  const handleClose = useCallback(() => {
     dispatch(clear())
     setIsOpen(false)
-  }
+  }, [])
 
-  const handleShowDetails = (report) => {
+  const handleShowDetails = useCallback((report) => {
     setIsOpen(true)
     dispatch(select(report))
-  }
+  }, [])
 
   return {
     reports,

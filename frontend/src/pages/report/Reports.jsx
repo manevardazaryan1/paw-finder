@@ -23,11 +23,9 @@ const Reports = () => {
     <div className="bg-black min-h-screen">
       <div className="px-4 py-6">
         <FilterPanel />
-
         {reports.length === 0 && (
           <p className="text-center text-gray-500 text-lg mt-6">No reports found</p>
         )}
-
         <List>
           {reports.map((datum) => {
             return (
@@ -67,7 +65,6 @@ const Reports = () => {
             )
           })}
         </List>
-
         <Pagination
           currentPage={page}
           lastPage={lastPage}

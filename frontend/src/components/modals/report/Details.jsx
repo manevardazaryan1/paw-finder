@@ -1,4 +1,5 @@
-import ConfirmDelete from './confirmDelete'
+import { memo } from 'react'
+import ConfirmDelete from './ConfirmDelete'
 import { BACKEND_URL } from '../../../constants/app'
 import useDetails from '../../../hooks/useDetails'
 
@@ -76,7 +77,6 @@ const Details = ({ isOpen, onClose }) => {
               <div className="w-1/3 text-sm font-medium text-gray-500">Description</div>
               <div className="w-2/3 text-sm text-gray-700">{report.description}</div>
             </div>
-
             <div className="flex py-2">
               <div className="w-1/3 text-sm font-medium text-gray-500">Location</div>
               <div className="w-2/3 text-sm text-gray-700">{report.location}</div>
@@ -87,11 +87,11 @@ const Details = ({ isOpen, onClose }) => {
             </div>
             <div className="flex py-2">
               <div className="w-1/3 text-sm font-medium text-gray-500">Author</div>
-              <div className="w-2/3 text-sm text-gray-700">{report.user.name}</div>
+              <div className="w-2/3 text-sm text-gray-700">{report.user?.name}</div>
             </div>
             <div className="flex py-2">
               <div className="w-1/3 text-sm font-medium text-gray-500">Email</div>
-              <div className="w-2/3 text-sm text-gray-700">{report.user.email}</div>
+              <div className="w-2/3 text-sm text-gray-700">{report.user?.email}</div>
             </div>
           </div>
         </div>
@@ -106,4 +106,4 @@ const Details = ({ isOpen, onClose }) => {
   )
 }
 
-export default Details
+export default memo(Details)

@@ -13,7 +13,7 @@ const UpdateReport = () => {
                 to-[#3b82f6]"
     >
       <h2 className="text-2xl font-semibold text-gray-800 text-center">Update Report</h2>
-      {formik && <ReportForm hook={useUpdateReport} type="update" />}
+      {formik && <ReportForm formik={formik} type="update" />}
     </div>
   )
 }

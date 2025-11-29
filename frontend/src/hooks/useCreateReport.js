@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useFormik } from 'formik'
 import { useNavigate } from 'react-router-dom'
@@ -19,15 +19,20 @@ const useCreateReport = () => {
     }
   }, [])
 
-  const formik = useFormik({
-    initialValues: {
+  const initialValues = useMemo(
+    () => ({
       status: 'lost',
       type: '',
       location: '',
       description: '',
       contact: '',
       image: null
-    },
+    }),
+    []
+  )
+
+  const formik = useFormik({
+    initialValues,
     validationSchema: reportCreateSchema,
     onSubmit: async (values, { setSubmitting, setErrors }) => {
       try {
