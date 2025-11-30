@@ -1,5 +1,4 @@
 import useReports from '../../hooks/useReports'
-import { BACKEND_URL } from '../../constants/app'
 import List from '../../components/list/List'
 import ListItem from '../../components/list/ListItem'
 import Details from '../../components/modals/report/Details'
@@ -14,6 +13,7 @@ const Reports = () => {
     hasPrevPage,
     lastPage,
     isOpen,
+    BACKEND_URL,
     handleClose,
     handleShowDetails,
     setPage
@@ -23,11 +23,11 @@ const Reports = () => {
     <div className="bg-black min-h-screen">
       <div className="px-4 py-6">
         <FilterPanel />
-        {reports.length === 0 && (
+        {reports?.length === 0 && (
           <p className="text-center text-gray-500 text-lg mt-6">No reports found</p>
         )}
         <List>
-          {reports.map((datum) => {
+          {reports?.map((datum) => {
             return (
               <ListItem key={datum.id}>
                 <div className="relative w-full h-48">

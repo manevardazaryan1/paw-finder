@@ -6,6 +6,8 @@ import { selectUser } from '../redux/slices/auth/signIn'
 import { destroy } from '../services/report'
 import { clear } from '../redux/slices/report'
 
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL
+
 const useDetails = (onClose) => {
   const report = useSelector(selectSelected)
   const currentUser = useSelector(selectUser)
@@ -37,6 +39,7 @@ const useDetails = (onClose) => {
     report: report || {},
     isOwner: isOwner,
     isConfirmOpen,
+    BACKEND_URL,
     handleUpdate,
     handleShowConfirmDeleteModal,
     handleCloseConfirmDeleteModal,

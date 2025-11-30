@@ -14,6 +14,8 @@ import {
   selectHasPrevPage
 } from '../redux/slices/report'
 
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL
+
 const useReports = () => {
   const dispatch = useDispatch()
   const [searchParams] = useSearchParams()
@@ -92,6 +94,7 @@ const useReports = () => {
     status,
     searchInput,
     sortOrder,
+    BACKEND_URL,
     setPage,
     handleClose,
     handleShowDetails,

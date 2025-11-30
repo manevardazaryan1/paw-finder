@@ -1,6 +1,5 @@
 import { memo } from 'react'
 import ConfirmDelete from './ConfirmDelete'
-import { BACKEND_URL } from '../../../constants/app'
 import useDetails from '../../../hooks/useDetails'
 
 const Details = ({ isOpen, onClose }) => {
@@ -8,6 +7,7 @@ const Details = ({ isOpen, onClose }) => {
     report,
     isOwner,
     isConfirmOpen,
+    BACKEND_URL,
     handleUpdate,
     handleShowConfirmDeleteModal,
     handleCloseConfirmDeleteModal,

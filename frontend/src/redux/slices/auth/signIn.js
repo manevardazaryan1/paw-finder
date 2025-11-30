@@ -47,8 +47,9 @@ const signInSlice = createSlice({
       .addCase(signIn.rejected, (state, action) => {
         state.loading = false
         state.error = [
-          action.payload?.message || 'Sign in failed',
-          ...action.payload.errors?.map((err) => err.msg)
+          'Sign in failed',
+          action.payload?.message,
+          ...action.payload?.errors?.map((err) => err.msg)
         ]
       })
   }
