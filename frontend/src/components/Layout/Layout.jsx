@@ -35,7 +35,7 @@ const Layout = () => {
           </div>
         </div>
         {menuOpen && (
-          <div className="absolute top-[79px] right-0 bg-black text-white w-full shadow-md flex flex-col space-y-2 p-4 items-center">
+          <div className="absolute z-10 top-[79px] right-0 bg-black text-white w-full shadow-md flex flex-col space-y-2 p-4 items-center">
             {!isAuth && <Link to="/">Home</Link>}
             {isAuth && <Link to="/reports">Reports</Link>}
             {isAuth && <Link to="/create-report">Create Report</Link>}
